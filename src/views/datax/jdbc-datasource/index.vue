@@ -233,9 +233,7 @@ export default {
       visible: true,
       dataSources: [
         { value: 'mysql', label: 'mysql' },
-        { value: 'oracle', label: 'oracle' },
         { value: 'postgresql', label: 'postgresql' },
-        { value: 'sqlserver', label: 'sqlserver' },
         { value: 'hive', label: 'hive' },
         { value: 'hbase', label: 'hbase' },
         { value: 'mongodb', label: 'mongodb' },
@@ -254,15 +252,9 @@ export default {
       if (datasource === 'mysql') {
         this.temp.jdbcUrl = 'jdbc:mysql://{host}:{port}/{database}'
         this.temp.jdbcDriverClass = 'com.mysql.jdbc.Driver'
-      } else if (datasource === 'oracle') {
-        this.temp.jdbcUrl = 'jdbc:oracle:thin:@//{host}:{port}/{database}'
-        this.temp.jdbcDriverClass = 'oracle.jdbc.OracleDriver'
       } else if (datasource === 'postgresql') {
         this.temp.jdbcUrl = 'jdbc:postgresql://{host}:{port}/{database}'
         this.temp.jdbcDriverClass = 'org.postgresql.Driver'
-      } else if (datasource === 'sqlserver') {
-        this.temp.jdbcUrl = 'jdbc:sqlserver://{host}:{port};DatabaseName={database}'
-        this.temp.jdbcDriverClass = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
       } else if (datasource === 'clickhouse') {
         this.temp.jdbcUrl = 'jdbc:clickhouse://{host}:{port}/{database}'
         this.temp.jdbcDriverClass = 'ru.yandex.clickhouse.ClickHouseDriver'
