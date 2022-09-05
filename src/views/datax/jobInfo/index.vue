@@ -592,42 +592,48 @@ export default {
     },
     handlerUpdate(row) {
       this.resetTemp()
-      this.temp = Object.assign({}, row) // copy obj
-      if (this.temp.jobJson) this.jobJson = JSON.parse(this.temp.jobJson)
-      this.glueSource = this.temp.glueSource
-      const arrchildSet = []
-      const arrJobIdList = []
-      if (this.jobIdList) {
-        for (const n in this.jobIdList) {
-          if (this.jobIdList[n].id !== this.temp.id) {
-            arrJobIdList.push(this.jobIdList[n])
-          }
-        }
-        this.JobIdList = arrJobIdList
-      }
+      // reload job info
+      job.getJob(row.id).then(response => {
+        const { content } = response
+        this.temp = content 
 
-      if (this.temp.childJobId) {
-        const arrString = this.temp.childJobId.split(',')
-        for (const i in arrString) {
+        // this.temp = Object.assign({}, row) // copy obj
+        if (this.temp.jobJson) this.jobJson = JSON.parse(this.temp.jobJson)
+        this.glueSource = this.temp.glueSource
+        const arrchildSet = []
+        const arrJobIdList = []
+        if (this.jobIdList) {
           for (const n in this.jobIdList) {
-            if (this.jobIdList[n].id === parseInt(arrString[i])) {
-              arrchildSet.push(this.jobIdList[n])
+            if (this.jobIdList[n].id !== this.temp.id) {
+              arrJobIdList.push(this.jobIdList[n])
             }
           }
+          this.JobIdList = arrJobIdList
         }
-        this.temp.childJobId = arrchildSet
-      }
-      if (this.temp.partitionInfo) {
-        const partition = this.temp.partitionInfo.split(',')
-        this.partitionField = partition[0]
-        this.timeOffset = partition[1]
-        this.timeFormatType = partition[2]
-      }
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+    
+        if (this.temp.childJobId) {
+          const arrString = this.temp.childJobId.split(',')
+          for (const i in arrString) {
+            for (const n in this.jobIdList) {
+              if (this.jobIdList[n].id === parseInt(arrString[i])) {
+                arrchildSet.push(this.jobIdList[n])
+              }
+            }
+          }
+          this.temp.childJobId = arrchildSet
+        }
+        if (this.temp.partitionInfo) {
+          const partition = this.temp.partitionInfo.split(',')
+          this.partitionField = partition[0]
+          this.timeOffset = partition[1]
+          this.timeFormatType = partition[2]
+        }
+        this.dialogStatus = 'update'
+        this.dialogFormVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+        })
     },
     updateData() {
       this.temp.jobJson = typeof (this.jobJson) !== 'string' ? JSON.stringify(this.jobJson) : this.jobJson

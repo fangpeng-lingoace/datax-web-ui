@@ -39,6 +39,13 @@ export function getExecutorList() {
   })
 }
 
+export function getJob(id) {
+  return request({
+    url: '/api/job/info?id=' + id,
+    method: 'get'
+  })
+}
+
 export function updateJob(data) {
   return request({
     url: '/api/job/update',
